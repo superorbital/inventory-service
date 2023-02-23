@@ -3,6 +3,8 @@ services:
     container_name: inventory-service
     build:
       context: .
+    # prebuilt images at:
+    # https://hub.docker.com/repository/docker/superorbital/inventory-service
     image: superorbital/inventory-service
     restart: unless-stopped
     networks:

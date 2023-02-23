@@ -1,4 +1,5 @@
 # docker buildx build --platform  linux/amd64,linux/arm64 --tag superorbital/inventory-service --push .
+# https://hub.docker.com/repository/docker/superorbital/inventory-service
 
 FROM golang:1.19-alpine AS build
 
