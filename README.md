@@ -34,3 +34,13 @@ $ curl -X GET 127.0.0.1:8080/items
 $ docker compose down
 ```
 
+## Releasing
+
+```sh
+$ go install github.com/mitchellh/gox@latest
+$ gox -osarch='darwin/amd64 darwin/arm64 freebsd/386 freebsd/amd64 freebsd/arm linux/386 linux/amd64 linux/arm linux/arm64 linux/mips linux/mips64 linux/mips64le linux/mipsle linux/s390x netbsd/386 netbsd/amd64 netbsd/arm openbsd/386 openbsd/amd64 windows/386 windows/amd64' -output './bin/builds/inventory-service_{{.OS}}_{{.Arch}}'
+```
+
+- Create a release in Github with the resulting binaries.
+- The container image will be built, tagged latest, and pushed to Docker Hub with eadch merge to main.
+
