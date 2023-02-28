@@ -26,7 +26,7 @@ $ curl -X GET 127.0.0.1:8080/items
 $ curl -H 'Content-Type: application/json' -X PUT -d '{"name":"car", "tag":"shelby"}' 127.0.0.1:8080/items/1000
 [{"id":1000,"name":"car","tag":"shelby"}]
 
-$ curl -H 'Content-Type: application/json' -X DELETE 127.0.0.1:8080/items/1002
+$ curl -H 'Content-Type: application/json' -X DELETE 127.0.0.1:8080/items/1000
 
 $ curl -X GET 127.0.0.1:8080/items
 []
