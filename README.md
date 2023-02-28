@@ -17,7 +17,7 @@ $ curl -X GET 127.0.0.1:8080/items
 $ curl -H 'Content-Type: application/json' -X POST -d '{"name":"car", "tag":"mustang"}' 127.0.0.1:8080/items
 {"id":1000,"name":"car","tag":"mustang"}
 
-curl -X GET 127.0.0.1:8080/items/1000
+$ curl -X GET 127.0.0.1:8080/items/1000
 {"id":1000,"name":"car","tag":"mustang"}
 
 $ curl -X GET 127.0.0.1:8080/items
