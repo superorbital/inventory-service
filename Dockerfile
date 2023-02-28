@@ -16,6 +16,8 @@ RUN go build --ldflags '-linkmode external -extldflags "-static"' .
 FROM alpine:3.14 AS deploy
 
 WORKDIR /
+
+RUN apk --no-cache add curl
 COPY --from=build /go/src/github.com/superorbital/inventory-service /
 
 HEALTHCHECK --interval=15s --timeout=3s \
