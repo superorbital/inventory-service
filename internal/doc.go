@@ -1,3 +1,6 @@
+// Package internal is used run the OpenAPI code generation.
+package internal
+
 // Copyright 2019 DeepMap, Inc.
 // Inventory Updates Copyright 2023 Superorbital LLC.
 //
@@ -12,7 +15,6 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-package internal
 
 // This directory contains the OpenAPI 3.0 specification which defines our
 // server. The file inventory.gen.go is automatically generated from the schema

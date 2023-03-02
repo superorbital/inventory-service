@@ -10,6 +10,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	middleware "github.com/deepmap/oapi-codegen/pkg/chi-middleware"
 	"github.com/go-chi/chi/v5"
@@ -44,8 +45,9 @@ func main() {
 	api.HandlerFromMux(itemStore, r)
 
 	s := &http.Server{
-		Handler: r,
-		Addr:    fmt.Sprintf("0.0.0.0:%d", *port),
+		Handler:           r,
+		Addr:              fmt.Sprintf("0.0.0.0:%d", *port),
+		ReadHeaderTimeout: 60 * time.Second,
 	}
 
 	// And we serve HTTP until the world ends.

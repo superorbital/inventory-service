@@ -9,6 +9,7 @@ import (
 	"sync"
 )
 
+// An Inventory object.
 type Inventory struct {
 	Items  map[int64]Item
 	NextId int64
@@ -19,6 +20,7 @@ type Inventory struct {
 
 var _ ServerInterface = (*Inventory)(nil)
 
+// NewInventory returns a new inventory that starts at ID 1000.
 func NewInventory() *Inventory {
 	return &Inventory{
 		Items:  make(map[int64]Item),
@@ -34,10 +36,13 @@ func sendInventoryError(w http.ResponseWriter, code int, message string) {
 		Message: message,
 	}
 	w.WriteHeader(code)
-	json.NewEncoder(w).Encode(itemErr)
+	err := json.NewEncoder(w).Encode(itemErr)
+	if err != nil {
+		return
+	}
 }
 
-// FindItems implements all the handlers in the ServerInterface
+// FindItems implements all the handlers in the ServerInterface.
 func (p *Inventory) FindItems(w http.ResponseWriter, r *http.Request, params FindItemsParams) {
 	p.Lock.Lock()
 	defer p.Lock.Unlock()
@@ -70,9 +75,14 @@ func (p *Inventory) FindItems(w http.ResponseWriter, r *http.Request, params Fin
 		result = []Item{}
 	}
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(result)
+	err := json.NewEncoder(w).Encode(result)
+	if err != nil {
+		sendInventoryError(w, http.StatusOK, "Unable to encode response")
+		return
+	}
 }
 
+// AddItem will add a single item to an existing inventory.
 func (p *Inventory) AddItem(w http.ResponseWriter, r *http.Request) {
 	// We expect a NewItem object in the request body.
 	var newItem NewItem
@@ -92,16 +102,21 @@ func (p *Inventory) AddItem(w http.ResponseWriter, r *http.Request) {
 	item.Name = newItem.Name
 	item.Tag = newItem.Tag
 	item.Id = p.NextId
-	p.NextId = p.NextId + 1
+	p.NextId++
 
 	// Insert into map
 	p.Items[item.Id] = item
 
 	// Now, we have to return the NewItem
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(item)
+	err := json.NewEncoder(w).Encode(item)
+	if err != nil {
+		sendInventoryError(w, http.StatusOK, "Unable to encode response")
+		return
+	}
 }
 
+// FindItemById will find a single item from the inventory based on its ID.
 func (p *Inventory) FindItemById(w http.ResponseWriter, r *http.Request, id int64) {
 	p.Lock.Lock()
 	defer p.Lock.Unlock()
@@ -113,9 +128,14 @@ func (p *Inventory) FindItemById(w http.ResponseWriter, r *http.Request, id int6
 	}
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(item)
+	err := json.NewEncoder(w).Encode(item)
+	if err != nil {
+		sendInventoryError(w, http.StatusOK, "Unable to encode response")
+		return
+	}
 }
 
+// UpdateItem will update a single item in the inventory.
 func (p *Inventory) UpdateItem(w http.ResponseWriter, r *http.Request, id int64) {
 	p.Lock.Lock()
 	defer p.Lock.Unlock()
@@ -141,9 +161,14 @@ func (p *Inventory) UpdateItem(w http.ResponseWriter, r *http.Request, id int64)
 	p.Items[id] = item
 
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(item)
+	err := json.NewEncoder(w).Encode(item)
+	if err != nil {
+		sendInventoryError(w, http.StatusOK, "Unable to encode response")
+		return
+	}
 }
 
+// DeleteItem will delete a single item in the inventory.
 func (p *Inventory) DeleteItem(w http.ResponseWriter, r *http.Request, id int64) {
 	p.Lock.Lock()
 	defer p.Lock.Unlock()

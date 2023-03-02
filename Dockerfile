@@ -25,4 +25,3 @@ HEALTHCHECK --interval=15s --timeout=3s \
 
 ENTRYPOINT ["/inventory-service"]
 CMD ["-port", "8080"]
-
